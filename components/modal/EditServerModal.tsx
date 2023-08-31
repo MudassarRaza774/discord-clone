@@ -24,17 +24,20 @@ import { FileUpload } from "@/components/FileUpload";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { useModal } from "@/hooks/useModalStore";
+import { useEffect } from "react";
 
 const formSchema = z.object({
   name: z.string().min(1, { message: "Server name is required" }),
   imageUrl: z.string().min(1, { message: "Server image is required" }),
 });
 
-export const CreateServerModal = () => {
-  const { isOpen, onClose, type } = useModal();
+export const EditServerModal = () => {
+  const { isOpen, onClose, type, data } = useModal();
   const router = useRouter();
 
-  const isModalOpen = isOpen && type === "createServer";
+  const { server } = data;
+
+  const isModalOpen = isOpen && type === "editServer";
 
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -44,16 +47,23 @@ export const CreateServerModal = () => {
     },
   });
 
+  useEffect(() => {
+    if (server) {
+      form.setValue("name", server.name);
+      form.setValue("imageUrl", server.imageUrl);
+    }
+  }, [server, form]);
+
   const isFormSubmitting = form.formState.isSubmitting;
 
   const onFormSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await axios.post("/api/server", values);
+      await axios.patch(`/api/server/${server?.id}`, values);
       form.reset();
       router.refresh();
       onClose();
     } catch (error) {
-      console.log("Error while creating server", error);
+      console.log("Error while editing server", error);
     }
   };
 
@@ -121,7 +131,7 @@ export const CreateServerModal = () => {
             </div>
             <DialogFooter className="bg-gray-100 px-6 py-4">
               <Button variant="primary" disabled={isFormSubmitting}>
-                Create
+                Save
               </Button>
             </DialogFooter>
           </form>
