@@ -3,6 +3,7 @@ import React from "react";
 import { CreateServerModal } from "../modal/CreateServerModal";
 import { InviteModal } from "../modal/InviteModal";
 import { EditServerModal } from "../modal/EditServerModal";
+import { ManageMember } from "../modal/ManageMembers";
 
 export const ModalProvider = () => {
   const [isMounted, setIsMounted] = React.useState(false);
@@ -20,6 +21,7 @@ export const ModalProvider = () => {
       <InviteModal />
       <EditServerModal />
       <CreateServerModal />
+      <ManageMember />
     </>
   );
 };
