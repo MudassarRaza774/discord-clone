@@ -1,24 +1,24 @@
 "use client";
 
-import { ServerWithMembersWithProfiles } from "@/types";
 import { MemberRole } from "@prisma/client";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
-import {
-  ChevronDown,
+  Users,
   LogOut,
-  PlusCircle,
+  UserPlus,
   Settings,
   TrashIcon,
-  UserPlus,
-  Users,
+  PlusCircle,
+  ChevronDown,
 } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuSeparator,
+} from "../ui/dropdown-menu";
 import { useModal } from "@/hooks/useModalStore";
+import type { ServerWithMembersWithProfiles } from "@/types";
 
 type ServerHeaderProps = {
   server: ServerWithMembersWithProfiles;
@@ -58,7 +58,10 @@ const ServerHeader = ({ server, role }: ServerHeaderProps) => {
           </DropdownMenuItem>
         )}
         {isAdmin && (
-          <DropdownMenuItem className=" px-3 py-2 text-sm curson-pointer">
+          <DropdownMenuItem
+            onClick={() => onOpen("members", { server })}
+            className=" px-3 py-2 text-sm curson-pointer"
+          >
             Manage Users
             <Users className="w-4 h-4 ml-auto" />
           </DropdownMenuItem>
