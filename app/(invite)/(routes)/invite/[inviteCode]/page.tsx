@@ -1,7 +1,7 @@
-import { currentProfile } from "@/lib/currentProfile";
-import { db } from "@/lib/db";
-import { redirectToSignIn } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
+import { redirectToSignIn } from "@clerk/nextjs";
+import { db } from "@/lib/db";
+import { currentProfile } from "@/lib/currentProfile";
 
 type InvitePage = {
   params: {
@@ -46,7 +46,7 @@ const InvitePage = async ({ params }: InvitePage) => {
   });
 
   if (server) {
-    return redirect(`server/${server.id}`);
+    return redirect(`/servers/${server.id}`);
   }
 
   return null;
