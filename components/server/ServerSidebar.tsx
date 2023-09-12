@@ -1,7 +1,5 @@
-import { db } from "@/lib/db";
 import { redirect } from "next/navigation";
 import { redirectToSignIn } from "@clerk/nextjs";
-import { currentProfile } from "@/lib/currentProfile";
 import { ChannelType, MemberRole } from "@prisma/client";
 import { Hash, Mic, ShieldAlert, ShieldCheck, Video } from "lucide-react";
 import ServerHeader from "./ServerHeader";
@@ -9,8 +7,9 @@ import { ServerSearch } from "./ServerSearch";
 import { ScrollArea } from "../ui/scroll-area";
 import { Separator } from "../ui/separator";
 import { ServerSection } from "./ServerSection";
-import { channel } from "diagnostics_channel";
 import { ServerChannel } from "./ServerChannel";
+import { db } from "@/lib/db";
+import { currentProfile } from "@/lib/currentProfile";
 
 type ServerSidebarProps = {
   serverId: string;
