@@ -5,6 +5,7 @@ import { Hash, Video, Mic, Edit, Trash, Lock } from "lucide-react";
 import { Channel, ChannelType, MemberRole, Server } from "@prisma/client";
 import { ActionTooltip } from "../ActionTooltip";
 import { cn } from "@/lib/utils";
+import { useModal } from "@/hooks/useModalStore";
 
 type ServerChannelProps = {
   channel: Channel;
@@ -23,8 +24,8 @@ export const ServerChannel = ({
   server,
   role,
 }: ServerChannelProps) => {
-  const router = useRouter();
   const params = useParams();
+  const { onOpen } = useModal();
 
   const Icon = iconMap[channel.type];
 
@@ -49,10 +50,16 @@ export const ServerChannel = ({
       {channel.name !== "general" && role !== MemberRole.GUEST && (
         <div className="ml-auto flex items-center gap-x-2">
           <ActionTooltip label="Edit">
-            <Edit className="hidden group-hover:block w-4 h-4 text-zinc-500 hover:text-zinc-600 dark:text-zinc-600 dark:hover:text-zinc-300 transition" />
+            <Edit
+              className="hidden group-hover:block w-4 h-4 text-zinc-500 hover:text-zinc-600 dark:text-zinc-400 dark:hover:text-zinc-300 transition"
+              onClick={() => onOpen("editChannel", { server, channel })}
+            />
           </ActionTooltip>
           <ActionTooltip label="Delete">
-            <Trash className="hidden group-hover:block w-4 h-4 text-zinc-500 hover:text-zinc-600 dark:text-zinc-600 dark:hover:text-zinc-300 transition" />
+            <Trash
+              className="hidden group-hover:block w-4 h-4 text-zinc-500 hover:text-zinc-600 dark:text-zinc-400 dark:hover:text-zinc-300 transition"
+              onClick={() => onOpen("deleteChannel", { server, channel })}
+            />
           </ActionTooltip>
         </div>
       )}

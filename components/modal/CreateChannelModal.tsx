@@ -45,21 +45,30 @@ const formSchema = z.object({
 });
 
 export const CreateChannelModal = () => {
-  const { isOpen, onClose, type } = useModal();
-  const [isLoading, setIsLoading] = React.useState(false);
-  const router = useRouter();
+  const { isOpen, onClose, type, data } = useModal();
+  const [isLoading] = React.useState(false);
 
+  const router = useRouter();
   const params = useParams();
 
-  const createChannel = isOpen && type === "createChannel";
+  const { channelType } = data;
+  const isDialogOpen = isOpen && type === "createChannel";
 
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
-      type: ChannelType.Text,
+      type: channelType || ChannelType.Text,
     },
   });
+
+  React.useEffect(() => {
+    if (channelType) {
+      form.setValue("type", channelType);
+    } else {
+      form.setValue("type", ChannelType.Text);
+    }
+  }, [channelType, form]);
 
   const isFormSubmitting = form.formState.isSubmitting;
 
@@ -86,7 +95,7 @@ export const CreateChannelModal = () => {
   };
 
   return (
-    <Dialog open={createChannel} onOpenChange={handleClose}>
+    <Dialog open={isDialogOpen} onOpenChange={handleClose}>
       <DialogContent className="bg-white text-black p-0 overflow-hidden">
         <DialogHeader className="pt-8 px-6">
           <DialogTitle className="text-2xl text-center font-bold">
