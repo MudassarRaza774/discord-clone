@@ -1,10 +1,10 @@
 "use client";
 
-import { cn } from "@/lib/utils";
-import { Member, MemberRole, Profile, Server } from "@prisma/client";
-import { ShieldAlert, ShieldCheck } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
+import { ShieldAlert, ShieldCheck } from "lucide-react";
+import { Member, MemberRole, Profile, Server } from "@prisma/client";
 import UserAvatar from "../UserAvatar";
+import { cn } from "@/lib/utils";
 
 type ManageMemberProps = {
   member: Member & { profile: Profile };
@@ -26,7 +26,7 @@ const ServerMember = ({ member, server }: ManageMemberProps) => {
   const icon = roleIconMap[member.role];
 
   const onClick = () => {
-    router.push(`servers/${params?.serverId}/conversations/${member.id}`);
+    router.push(`/servers/${params?.serverId}/conversations/${member.id}`);
   };
 
   return (
@@ -45,7 +45,7 @@ const ServerMember = ({ member, server }: ManageMemberProps) => {
         <p
           className={cn(
             "font-semibold text-sm  text-zinc-500 group-hover:text-zinc-600 dark:text-zinc-400 dark:group-hover:text-zinc-300 transition",
-            params?.channelId === member.id &&
+            params?.memberId === member.id &&
               "text-primary dark:text-zinc-200 dark:group-hover:text-white"
           )}
         >
