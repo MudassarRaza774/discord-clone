@@ -1,20 +1,31 @@
 "use client";
-import Picker from "@emoji-mart/react";
-import data from "@emoji-mart/data";
+import PickEmoji, { Theme } from "emoji-picker-react";
 import { useTheme } from "next-themes";
+import { Smile } from "lucide-react";
 import {
   Popover,
   PopoverTrigger,
   PopoverContent,
 } from "@/components/ui/popover";
-import { Smile } from "lucide-react";
+import type { EmojiClickData } from "emoji-picker-react";
 
 type EmojiPickerProps = {
-  onChange: (value: string) => void;
+  onChange: (value: EmojiClickData) => void;
 };
+
+const themeMapping = {
+  dark: Theme.DARK,
+  light: Theme.LIGHT,
+  system: Theme.AUTO,
+};
+
+type themeMappingType = keyof typeof themeMapping;
 
 export const EmojiPicker = ({ onChange }: EmojiPickerProps) => {
   const { resolvedTheme } = useTheme();
+
+  const selectedTheme = !resolvedTheme ? "dark" : resolvedTheme;
+
   return (
     <Popover>
       <PopoverTrigger>
@@ -25,12 +36,9 @@ export const EmojiPicker = ({ onChange }: EmojiPickerProps) => {
         sideOffset={40}
         className="bg-transparent border-none shadow-none drop-shadow-none mb-16"
       >
-        <Picker
-          data={data}
-          theme={resolvedTheme}
-          onEmojiSelect={(emoji: any) => {
-            onChange(emoji.native);
-          }}
+        <PickEmoji
+          theme={themeMapping[selectedTheme as themeMappingType]}
+          onEmojiClick={(emoji) => onChange(emoji)}
         />
       </PopoverContent>
     </Popover>
