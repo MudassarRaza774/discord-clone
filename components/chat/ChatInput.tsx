@@ -76,8 +76,8 @@ export const ChatInput = ({ apiUrl, query, name, type }: ChatInputProps) => {
                   />
                   <div className="absolute top-7 right-8">
                     <EmojiPicker
-                      onChange={(emoji: string) =>
-                        field.onChange(`${field.value}${emoji}`)
+                      onChange={(emojiData) =>
+                        field.onChange(`${field.value}${emojiData.emoji}`)
                       }
                     />
                   </div>
