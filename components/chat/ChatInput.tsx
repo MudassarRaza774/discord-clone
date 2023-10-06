@@ -10,6 +10,7 @@ import { Form, FormField, FormControl, FormItem } from "@/components/ui/form";
 import { useModal } from "@/hooks/useModalStore";
 import { EmojiPicker } from "../EmojiPicker";
 import { useRouter } from "next/navigation";
+import { useSendMessage } from "@/hooks/useSendMessage";
 
 type ChatInputProps = {
   apiUrl: string;
@@ -22,9 +23,14 @@ const formSchema = z.object({
   content: z.string().min(1),
 });
 
+export type formSchemaType = z.infer<typeof formSchema>;
+
 export const ChatInput = ({ apiUrl, query, name, type }: ChatInputProps) => {
   const router = useRouter();
   const { onOpen } = useModal();
+
+  const { mutateAsync } = useSendMessage();
+
   const form = useForm<z.infer<typeof formSchema>>({
     defaultValues: {
       content: "",
@@ -34,13 +40,14 @@ export const ChatInput = ({ apiUrl, query, name, type }: ChatInputProps) => {
 
   const isLoading = form.formState.isSubmitting;
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (values: formSchemaType) => {
     try {
       const url = qs.stringifyUrl({
         url: apiUrl,
         query,
       });
-      await axios.post(url, values);
+      // await axios.post(url, values);
+      mutateAsync({ url, values });
       form.reset();
       router.refresh();
     } catch (error) {
