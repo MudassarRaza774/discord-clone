@@ -26,19 +26,26 @@ export const useChatQuery = ({
           [paramKey]: paramValue,
         },
       },
-      {
-        skipNull: true,
-      }
+      { skipNull: true }
     );
 
     const response = await fetch(url);
     return response.json();
   };
 
-  return useInfiniteQuery({
-    queryKey: [queryKey],
-    queryFn: fetchMessages,
-    getNextPageParam: (lastPage) => lastPage?.nextCursor,
-    refetchInterval: isConnected ? false : 1000,
-  });
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } =
+    useInfiniteQuery({
+      queryKey: [queryKey],
+      queryFn: fetchMessages,
+      getNextPageParam: (lastPage) => lastPage?.nextCursor,
+      refetchInterval: isConnected ? false : 1000,
+    });
+
+  return {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    status,
+  };
 };

@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import * as z from "zod";
 import axios from "axios";
 import qs from "query-string";
@@ -10,8 +10,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Member, MemberRole, Profile } from "@prisma/client";
 import { Edit, FileIcon, ShieldAlert, ShieldCheck, Trash } from "lucide-react";
-import UserAvatar from "../UserAvatar";
-import { ActionTooltip } from "../ActionTooltip";
+import UserAvatar from "@/components/UserAvatar";
+import { ActionTooltip } from "@/components/ActionTooltip";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
@@ -74,25 +74,25 @@ export const ChatItem = ({
       if (event.key === "Escape" || event.keyCode === 27) {
         setIsEditing(false);
       }
-
-      window.addEventListener("keydown", handleKeyDown);
-
-      return () => window.removeEventListener("keydown", handleKeyDown);
     };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => window.removeEventListener("keyDown", handleKeyDown);
   }, []);
 
   const form = useForm<formSchemaType>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      content,
+      content: content,
     },
   });
 
   useEffect(() => {
     form.reset({
-      content,
+      content: content,
     });
-  }, [content, form]);
+  }, [content]);
 
   const fileType = fileUrl?.split(".").pop();
 
@@ -125,7 +125,7 @@ export const ChatItem = ({
       <div className="group flex gap-x-2 items-start w-full">
         <div
           onClick={onMemberClick}
-          className="cursor-pointer hover:drop-shadow-md  transition "
+          className="cursor-pointer hover:drop-shadow-md transition"
         >
           <UserAvatar src={member.profile.imageUrl} />
         </div>
@@ -134,7 +134,7 @@ export const ChatItem = ({
             <div className="flex items-center">
               <p
                 onClick={onMemberClick}
-                className="font-semibold tex-sm hover:underline cursor-pointer"
+                className="font-semibold text-sm hover:underline cursor-pointer"
               >
                 {member.profile.name}
               </p>
@@ -155,20 +155,20 @@ export const ChatItem = ({
             >
               <Image
                 src={fileUrl}
-                alt="content"
+                alt={content}
                 fill
                 className="object-cover"
               />
             </a>
           )}
           {isPDF && (
-            <div className="relative flex items-center p-2 mt-2  rounded-md bg-background/10">
+            <div className="relative flex items-center p-2 mt-2 rounded-md bg-background/10">
               <FileIcon className="h-10 w-10 fill-indigo-200 stroke-indigo-400" />
               <a
                 href={fileUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="ml-2 text-sm text-indigo-500  dark:text-indigo-400 hover:underline "
+                className="ml-2 text-sm text-indigo-500 dark:text-indigo-400 hover:underline"
               >
                 PDF File
               </a>
@@ -231,7 +231,7 @@ export const ChatItem = ({
           {canEditMessage && (
             <ActionTooltip label="Edit">
               <Edit
-                className="cursor-pointer ml-auto w-4 h-4 text-zinc-500 hover-text-zinc-600 dark:hover:text-zinc-300 transition"
+                className="cursor-pointer ml-auto w-4 h-4 text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300 transition"
                 onClick={() => setIsEditing(true)}
               />
             </ActionTooltip>
@@ -244,7 +244,7 @@ export const ChatItem = ({
                   query: socketQuery,
                 })
               }
-              className="cursor-pointer ml-auto w-4 h-4 text-zinc-500 hover-text-zinc-600 dark:hover:text-zinc-300 transition"
+              className="cursor-pointer ml-auto w-4 h-4 text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300 transition"
             />
           </ActionTooltip>
         </div>

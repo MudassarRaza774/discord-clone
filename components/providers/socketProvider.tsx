@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+
 import { createContext, useContext, useEffect, useState } from "react";
 import { io as ClientIO } from "socket.io-client";
 
@@ -40,7 +40,7 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
 
     setSocket(socketInstance);
 
-    return () => socketInstance.disconnet();
+    return () => socketInstance.disconnect();
   }, []);
 
   return (
